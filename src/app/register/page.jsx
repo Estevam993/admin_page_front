@@ -1,11 +1,25 @@
 "use client";
 
 import { Card, Content, DynamicForm } from "@/components";
+import { useUser } from "@/hooks";
 import { useRouter } from "next/navigation";
 
-export default function Page() {
+export default function YourComponent() {
   const router = useRouter();
   const redirectLogin = () => router.push("/login");
+  const { register, ToastComponent } = useUser();
+
+  const handleClick = async (formValues) => {
+    try {
+      await register(formValues);
+    } catch (e) {
+      toast({
+        description: "Something went wrong",
+        status: "error",
+        variant: "filled",
+      });
+    }
+  };
 
   return (
     <Content>
@@ -14,7 +28,7 @@ export default function Page() {
           inputs={[
             {
               type: "text",
-              name: "firstName",
+              name: "name",
               label: "Full Name",
               required: true,
             },
@@ -42,11 +56,12 @@ export default function Page() {
               label: "Register",
               variant: "contained",
               color: "success",
-              onClick: (formValues) => alert(JSON.stringify(formValues)),
+              onClick: (formValues) => handleClick(formValues),
             },
           ]}
         />
       </Card>
+      <ToastComponent />
     </Content>
   );
 }

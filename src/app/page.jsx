@@ -20,23 +20,21 @@ export default function Home() {
           <Typography variant="subtitle1">
             This is a work in progress and will be updated frequently.
           </Typography>
-          <Stack direction={"row"} spacing={2}>
-            <Button
+          {/* <Button
               variant="contained"
               startIcon={<IconUserPlus />}
               onClick={handleRegister}
             >
               Register
-            </Button>
-            <Button
-              variant="contained"
-              color="success"
-              startIcon={<IconLogin2 />}
-              onClick={handleLogin}
-            >
-              Login
-            </Button>
-          </Stack>
+            </Button> */}
+          <Button
+            variant="contained"
+            color="success"
+            startIcon={<IconLogin2 />}
+            onClick={handleLogin}
+          >
+            Login
+          </Button>
         </Stack>
       </Card>
     </Content>

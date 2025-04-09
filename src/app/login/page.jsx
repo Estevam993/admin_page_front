@@ -1,20 +1,40 @@
 "use client";
 
 import { Card, Content, DynamicForm } from "@/components";
+import { useUser } from "@/hooks";
+import { Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
   const router = useRouter();
   const redirectRegister = () => router.push("/register");
 
+  const { login, ToastComponent } = useUser();
+
+  const handleClick = async (formValues) => {
+    try {
+      await login(formValues);
+    } catch (e) {
+      toast({
+        description: "Something went wrong",
+        status: "error",
+        variant: "filled",
+      });
+    }
+  };
+
   return (
     <Content>
       <Card title={"Login"} sx={{ width: "100%", maxWidth: 700 }}>
+        <Typography textAlign={"center"} variant="subtitle2">
+          Name: Admin <br />
+          Password: Admin1234
+        </Typography>
         <DynamicForm
           inputs={[
             {
               type: "text",
-              name: "nameOrEmail",
+              name: "email",
               label: "Name or Email",
               required: true,
             },
@@ -36,11 +56,12 @@ export default function Page() {
               label: "Login",
               variant: "contained",
               color: "success",
-              onClick: (formValues) => alert(JSON.stringify(formValues)),
+              onClick: (formValues) => handleClick(formValues),
             },
           ]}
         />
       </Card>
+      <ToastComponent />
     </Content>
   );
 }
