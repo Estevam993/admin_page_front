@@ -122,7 +122,7 @@ export default function Menu({ children }) {
     <Box className="teste" sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar sx={{ backgroundColor: "#6259cf" }}>
+        <Toolbar sx={{ backgroundColor: "#2c2c2c" }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -207,7 +207,7 @@ export default function Menu({ children }) {
         sx={{
           height: "calc(100vh)",
           width: "100%",
-          backgroundColor: '#7367f0'
+          backgroundColor: '#575757'
         }}
       >
         <DrawerHeader />

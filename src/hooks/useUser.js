@@ -18,13 +18,23 @@ const useUser = () => {
       return data;
     },
     onSuccess: async (response) => {
+      if(!!response.status && response.status === "error") {
+        toast({
+          description: response.message,
+          status: "error",
+        });
+        return
+      }
+
       await setCookie("jwt", response.access_token);
       await setCookie("id", response.id);
+
       toast({
         description: "Login realizado com sucesso!",
         status: "success",
       });
-      router.push("/dashboard");
+
+      router.push("/employees");
     },
     onError: (error) => {
       toast({

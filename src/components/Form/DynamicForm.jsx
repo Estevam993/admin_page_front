@@ -5,6 +5,7 @@ import {
   IconButton,
   InputAdornment,
   Button,
+  Autocomplete,
 } from "@mui/material";
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
 import { useState } from "react";
@@ -35,46 +36,76 @@ export default function DynamicForm({ inputs, buttons }) {
 
   return (
     <Stack>
-      {inputs?.map((input, index) => (
-        <TextField
-          key={index}
-          type={
-            input.type === "password"
-              ? showPassword[input.name]
-                ? "text"
-                : "password"
-              : input.type
-          }
-          name={input.name}
-          label={input.label}
-          required={input.required}
-          fullWidth
-          margin="normal"
-          variant="filled"
-          color="black"
-          InputProps={
-            input.type === "password"
-              ? {
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => handleTogglePassword(input.name)}
-                        edge="end"
-                      >
-                        {showPassword[input.name] ? (
-                          <IconEyeOff />
-                        ) : (
-                          <IconEye />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
+      {inputs?.map((input, index) => {
+        switch (input.type) {
+          case "options":
+            return (
+              <Autocomplete
+                key={index}
+                margin="normal"
+                required={input.required}
+                fullWidth
+                options={input?.options ?? [""]}
+                onChange={(event, newValue) => {
+                  handleInputChange(input.name, newValue);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    margin="normal"
+                    required={input.required}
+                    fullWidth
+                    label={input.label}
+                    name={input.name}
+                    variant="filled"
+                  />
+                )}
+              />
+            );
+
+          default:
+            return (
+              <TextField
+                key={index}
+                type={
+                  input.type === "password"
+                    ? showPassword[input.name]
+                      ? "text"
+                      : "password"
+                    : input.type
                 }
-              : undefined
-          }
-          onChange={(e) => handleInputChange(input.name, e.target.value)}
-        />
-      )) || ""}
+                name={input.name}
+                label={input.label}
+                required={input.required}
+                fullWidth
+                margin="normal"
+                variant="filled"
+                color="black"
+                InputProps={
+                  input.type === "password"
+                    ? {
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() => handleTogglePassword(input.name)}
+                              edge="end"
+                            >
+                              {showPassword[input.name] ? (
+                                <IconEyeOff />
+                              ) : (
+                                <IconEye />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }
+                    : undefined
+                }
+                onChange={(e) => handleInputChange(input.name, e.target.value)}
+              />
+            );
+        }
+      }) || ""}
       <Stack direction={"row"} justifyContent={"space-evenly"} sx={{ mt: 2 }}>
         {buttons?.map((button, index) => (
           <Button

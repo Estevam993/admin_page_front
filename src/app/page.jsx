@@ -20,13 +20,13 @@ export default function Home() {
           <Typography variant="subtitle1">
             This is a work in progress and will be updated frequently.
           </Typography>
-          {/* <Button
+          <Button
               variant="contained"
               startIcon={<IconUserPlus />}
               onClick={handleRegister}
             >
               Register
-            </Button> */}
+            </Button>
           <Button
             variant="contained"
             color="success"
