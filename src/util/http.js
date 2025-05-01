@@ -1,17 +1,17 @@
 "use server";
 
 import axios from "axios";
-import { cookies } from "next/headers";
+import {cookies} from "next/headers";
 
 export const postRequest = async (config) => {
-  const { url, params, headers } = config;
+  const {url, params, headers} = config;
 
-  const newHeaders = { ...headers };
+  const newHeaders = {...headers};
 
   newHeaders.Authorization = `Bearer ${newHeaders.Authorization}`;
 
   try {
-    const response = await axios.post(url, params, { headers: newHeaders });
+    const response = await axios.post(url, params, {headers: newHeaders});
 
     return response.data;
   } catch (error) {
@@ -20,14 +20,18 @@ export const postRequest = async (config) => {
 };
 
 export const getRequest = async (config) => {
-  const { url, headers } = config;
+  const {url, headers} = config;
 
-  const newHeaders = { ...headers };
+  const newHeaders = {...headers};
 
-  newHeaders.Authorization = `Bearer ${newHeaders.Authorization}`;
+  if (newHeaders.Authorization === undefined) {
+    const cookie = await getCookie('jwt')
+
+    newHeaders.Authorization = `Bearer ${cookie}`;
+  }
 
   try {
-    const response = await axios.get(url, { headers: newHeaders });
+    const response = await axios.get(url, {headers: newHeaders});
 
     if (typeof response.data !== "object") {
       throw new Error("An error has ocurred");
@@ -40,14 +44,14 @@ export const getRequest = async (config) => {
 };
 
 export const deleteRequest = async (config) => {
-  const { url, headers } = config;
+  const {url, headers} = config;
 
-  const newHeaders = { ...headers };
+  const newHeaders = {...headers};
 
   newHeaders.Authorization = `Bearer ${newHeaders.Authorization}`;
 
   try {
-    const response = await axios.delete(url, { headers: newHeaders });
+    const response = await axios.delete(url, {headers: newHeaders});
 
     if (typeof response.data !== "object") {
       throw new Error("An error has occurred");
@@ -65,11 +69,9 @@ export const setCookie = async (name, value, options = {}) => {
   cookieStore.set(name, value, {
     path: "/",
     httpOnly: true,
-    secure: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "Strict",
     maxAge: 24 * 60 * 60,
-    path: "/",
     ...options,
   });
 };

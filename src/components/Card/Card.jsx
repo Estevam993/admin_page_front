@@ -12,8 +12,12 @@ import {
 export default function Card({ children, title, buttons, sx, ...props }) {
   return (
     <MuiCard  {...props}  sx={{...sx }}>
-      {!!title && <CardHeader title={title} />}
-      <Divider />
+      {!!title && (
+        <>
+          <CardHeader title={title}/>
+          <Divider />
+        </>
+      )}
       <CardContent>{children}</CardContent>
     </MuiCard>
   );
