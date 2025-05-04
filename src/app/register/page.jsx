@@ -48,7 +48,6 @@ export default function YourComponent() {
           buttons={[
             {
               label: "I have an account",
-              variant: "contained",
               variant: "text",
               onClick: (formValues) => redirectLogin(),
             },

@@ -7,10 +7,10 @@ import {
   Button,
   Autocomplete,
 } from "@mui/material";
-import { IconEye, IconEyeOff } from "@tabler/icons-react";
-import { useState } from "react";
+import {IconEye, IconEyeOff} from "@tabler/icons-react";
+import {useState} from "react";
 
-export default function DynamicForm({ inputs, buttons }) {
+export default function DynamicForm({inputs, buttons}) {
   const [showPassword, setShowPassword] = useState({});
 
   const [formValues, setFormValues] = useState(
@@ -47,8 +47,12 @@ export default function DynamicForm({ inputs, buttons }) {
                 fullWidth
                 options={input?.options ?? [""]}
                 onChange={(event, newValue) => {
-                  handleInputChange(input.name, newValue);
+                  const id = newValue?.id;
+                  console.log(id)
+                  handleInputChange(input.name, id);
                 }}
+                getOptionKey={(option) => option.id}
+                getOptionLabel={(option) => option.label}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -84,21 +88,21 @@ export default function DynamicForm({ inputs, buttons }) {
                 InputProps={
                   input.type === "password"
                     ? {
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <IconButton
-                              onClick={() => handleTogglePassword(input.name)}
-                              edge="end"
-                            >
-                              {showPassword[input.name] ? (
-                                <IconEyeOff />
-                              ) : (
-                                <IconEye />
-                              )}
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={() => handleTogglePassword(input.name)}
+                            edge="end"
+                          >
+                            {showPassword[input.name] ? (
+                              <IconEyeOff/>
+                            ) : (
+                              <IconEye/>
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }
                     : undefined
                 }
                 onChange={(e) => handleInputChange(input.name, e.target.value)}
@@ -106,14 +110,15 @@ export default function DynamicForm({ inputs, buttons }) {
             );
         }
       }) || ""}
-      <Stack direction={"row"} justifyContent={"space-evenly"} sx={{ mt: 2 }}>
+      <Stack direction={"row"} justifyContent={"space-evenly"} sx={{mt: 2}}>
         {buttons?.map((button, index) => (
           <Button
             key={index}
             variant={button.variant}
             color={button.color}
             onClick={() => button.onClick(formValues)}
-            sx={{ margin: "8px" }}
+            sx={{margin: "8px"}}
+            loading={!!button?.loading}
           >
             {button.label}
           </Button>

@@ -1,0 +1,1 @@
+export { default as useEmployeeService} from './employees/useEmployeeService'

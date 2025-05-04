@@ -8,7 +8,11 @@ export const postRequest = async (config) => {
 
   const newHeaders = {...headers};
 
-  newHeaders.Authorization = `Bearer ${newHeaders.Authorization}`;
+  if (newHeaders.Authorization === undefined) {
+    const cookie = await getCookie('jwt')
+
+    newHeaders.Authorization = `Bearer ${cookie}`;
+  }
 
   try {
     const response = await axios.post(url, params, {headers: newHeaders});

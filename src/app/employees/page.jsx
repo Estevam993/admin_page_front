@@ -13,93 +13,54 @@ import {
   TableRow,
   Tooltip, Typography
 } from "@mui/material";
-import {IconUserPlus} from "@tabler/icons-react";
+import {IconTools, IconUserPlus, IconVectorBezier} from "@tabler/icons-react";
 import {useRouter} from "next/navigation";
 import {useEmployee} from "@/hooks";
+import {EmployeeTable} from "@/components/pages";
 
 export default function Page() {
   const {allEmployees, allEmployeesLoading} = useEmployee()
   const router = useRouter();
   const addUser = () => router.push("/employees/add");
 
-  const EmployeeTable = () => {
-    if (allEmployees.status === 'success') {
-      const employees = allEmployees.employees;
-
-      const employeesMap = () => employees.map((employee, index) => (
-        <TableRow key={index}>
-          <TableCell>
-            <Typography>{employee.id}</Typography>
-          </TableCell>
-          <TableCell>
-            <Typography>{employee.name}</Typography>
-          </TableCell>
-          <TableCell>
-            <Typography>{employee.email}</Typography>
-          </TableCell>
-          <TableCell>
-            <Typography>{employee.roleDetails.label}</Typography>
-          </TableCell>
-          <TableCell>
-            <Typography>{employee.departmentDetails.label}</Typography>
-          </TableCell>
-          <TableCell>
-            <Typography>Ação</Typography>
-          </TableCell>
-        </TableRow>
-      ))
-
-      return (
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <Typography>ID</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography>Name</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography>E-mail</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography>Role</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography>Department</Typography>
-              </TableCell>
-              <TableCell>
-                <Typography>Actions</Typography>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {employeesMap()}
-          </TableBody>
-        </Table>
-      )
-    }
-
-  }
-
   return (
     <Grid container padding={2} spacing={2} size={{xs: 12, sm: 6}}>
       <Grid size={4}>
         <Card>
-          <Button
-            variant="contained"
-            startIcon={<IconUserPlus/>}
-            onClick={addUser}
-          >
-            Add User
-          </Button>
+          <Stack gap={2} direction={"column"} alignItems={"stretch"}>
+            <Button
+              variant="contained"
+              color="success"
+              startIcon={<IconUserPlus/>}
+              onClick={addUser}
+            >
+              Add User
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              startIcon={<IconVectorBezier/>}
+              onClick={addUser}
+            >
+              Add Department
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<IconTools/>}
+              onClick={addUser}
+            >
+              Add Role
+            </Button>
+
+          </Stack>
         </Card>
       </Grid>
       <Grid size={8}>
         <Card title={"Employees"}>
           {
             !allEmployeesLoading
-              ? <EmployeeTable/>
+              ? <EmployeeTable allEmployees={allEmployees} allEmployeesLoading={allEmployeesLoading} />
               : <Typography>Loading...</Typography>
           }
         </Card>

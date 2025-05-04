@@ -1,19 +1,22 @@
 "use client";
 
-import { Card, Content, DynamicForm } from "@/components";
-import { useUser } from "@/hooks";
-import { Typography } from "@mui/material";
-import { useRouter } from "next/navigation";
+import {Card, Content, DynamicForm} from "@/components";
+import {useGetParameters, useUser} from "@/hooks";
+import {Typography} from "@mui/material";
+import {useRouter} from "next/navigation";
+import useToast from "@/services/useToast";
 
 export default function Page() {
   const router = useRouter();
+  const {toast} = useToast();
   const redirectRegister = () => router.push("/register");
 
-  const { login, ToastComponent } = useUser();
+  const {login, ToastComponent} = useUser();
 
   const handleClick = async (formValues) => {
     try {
       await login(formValues);
+      const parameters = useGetParameters()
     } catch (e) {
       toast({
         description: "Something went wrong",
@@ -25,11 +28,7 @@ export default function Page() {
 
   return (
     <Content>
-      <Card title={"Login"} sx={{ width: "100%", maxWidth: 700 }}>
-        <Typography textAlign={"center"} variant="subtitle2">
-          Name: Admin <br />
-          Password: Admin1234
-        </Typography>
+      <Card title={"Login"} sx={{width: "100%", maxWidth: 700}}>
         <DynamicForm
           inputs={[
             {
@@ -61,7 +60,7 @@ export default function Page() {
           ]}
         />
       </Card>
-      <ToastComponent />
+      <ToastComponent/>
     </Content>
   );
 }

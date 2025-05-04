@@ -1,24 +1,25 @@
-import { postRequest } from "@/util/http";
-import { useMutation } from "@tanstack/react-query";
-import { setCookie } from "cookies-next";
-import { useRouter } from "next/navigation";
+import {postRequest} from "@/util/http";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {setCookie} from "cookies-next";
+import {useRouter} from "next/navigation";
 import useToast from "@/services/useToast";
 
 const useUser = () => {
   const router = useRouter();
-  const { toast, ToastComponent } = useToast();
+  const {toast, ToastComponent} = useToast();
+  const queryClient = useQueryClient();
 
   const loginMutation = useMutation({
     mutationFn: async (params) => {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      const data = await postRequest({
+      return await postRequest({
         url: `${apiUrl}auth/login`,
         params: params,
       });
-      return data;
+
     },
     onSuccess: async (response) => {
-      if(!!response.status && response.status === "error") {
+      if (!!response.status && response.status === "error") {
         toast({
           description: response.message,
           status: "error",
@@ -33,6 +34,9 @@ const useUser = () => {
         description: "Login realizado com sucesso!",
         status: "success",
       });
+
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      await queryClient.invalidateQueries('parameters');
 
       router.push("/employees");
     },
@@ -84,7 +88,7 @@ const useUser = () => {
     register: registerMutation.mutate,
     isLoading: loginMutation.isLoading || registerMutation.isLoading,
     isError: loginMutation.isError || registerMutation.isError,
-    ToastComponent, // Need to expose this to render the toast
+    ToastComponent,
   };
 };
 
