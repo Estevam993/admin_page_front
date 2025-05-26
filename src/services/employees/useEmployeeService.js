@@ -4,7 +4,7 @@ import {useRouter} from "next/navigation";
 const useEmployeeService = () => {
   const router = useRouter()
 
-  const buttons = (loading, handleSubmit) => {
+  const buttons = (label = 'Create', loading, handleSubmit) => {
     return [
       {
         label: "Cancel",
@@ -13,7 +13,7 @@ const useEmployeeService = () => {
         onClick: () => router.push("/employees"),
       },
       {
-        label: "Create",
+        label: label,
         variant: "contained",
         color: "success",
         loading: loading,
@@ -22,19 +22,21 @@ const useEmployeeService = () => {
     ]
   }
 
-  const inputs = (roles, departments) => {
+  const inputs = (roles, departments, values = {}) => {
     return [
       {
         type: "text",
         name: "name",
         label: "Name",
         required: true,
+        value: values.name || '',
       },
       {
         type: "text",
         name: "email",
         label: "Email",
         required: true,
+        value: values.email || '',
       },
       {
         type: "options",
@@ -42,6 +44,7 @@ const useEmployeeService = () => {
         name: "role",
         label: "Role",
         required: true,
+        value: values.role || null,
       },
       {
         type: "options",
@@ -49,6 +52,7 @@ const useEmployeeService = () => {
         name: "department",
         label: "Department",
         required: true,
+        value: values.role || null,
       },
     ]
   }

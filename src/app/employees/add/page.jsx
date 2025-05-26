@@ -9,7 +9,7 @@ import {useEmployeeService} from "@/services";
 export default function Page() {
   const {parameters} = useGetParameters()
   const [loading, setLoading] = useState(false)
-  const {create, ToastComponent} = useEmployee()
+  const {create} = useEmployee()
   const {buttons, inputs} = useEmployeeService()
 
   const roles = parameters ? parameters?.roles : {}
@@ -18,6 +18,8 @@ export default function Page() {
   const handleSubmit = async formValues => {
     setLoading(true)
     try {
+      formValues = {...formValues, role: formValues.role.id, department: formValues.department.id}
+
       await create(formValues)
     } finally {
       setLoading(false)
@@ -25,7 +27,7 @@ export default function Page() {
   }
 
   const myInputs = inputs(roles, departments)
-  const myButtons = buttons( loading, handleSubmit)
+  const myButtons = buttons(false, handleSubmit)
 
   return (
     <Content>
@@ -35,7 +37,6 @@ export default function Page() {
           buttons={myButtons}
         />
       </Card>
-      <ToastComponent/>
     </Content>
   );
 }

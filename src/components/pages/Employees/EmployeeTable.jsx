@@ -1,7 +1,35 @@
 'use client'
-import {Table, TableBody, TableCell, TableHead, TableRow, Typography} from "@mui/material";
+import {useState} from "react";
+import {
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Tooltip,
+  Typography,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  ListItemText
+} from "@mui/material";
+import {IconSettings, IconUserEdit, IconUserX} from "@tabler/icons-react";
+import {useRouter} from "next/navigation";
 
 const EmployeeTable = ({allEmployees, allEmployeesLoading}) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [employeeId, setEmployeeId] = useState(null);
+  const router = useRouter()
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   if (allEmployees?.status === 'success' && !allEmployeesLoading) {
     const employees = allEmployees.employees;
 
@@ -23,7 +51,37 @@ const EmployeeTable = ({allEmployees, allEmployeesLoading}) => {
           <Typography>{employee.departmentDetails.label}</Typography>
         </TableCell>
         <TableCell>
-          <Typography>Ação</Typography>
+          <Tooltip title="Settings" placement="top" arrow>
+            <IconButton onClick={(e) => {
+              setEmployeeId(employee.id)
+              handleClick(e)
+            }}>
+              <IconSettings/>
+            </IconButton>
+          </Tooltip>
+          <Menu
+            anchorEl={anchorEl}
+            open={open && employeeId === employee.id}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={() => router.push(`/employees/update/${employee.id}`)}>
+              <ListItemIcon>
+                <IconUserEdit/>
+              </ListItemIcon>
+              <ListItemText>
+                Edit
+              </ListItemText>
+            </MenuItem>
+            <MenuItem>
+              <ListItemIcon>
+                <IconUserX/>
+              </ListItemIcon>
+              <ListItemText>
+                Remove
+              </ListItemText>
+            </MenuItem>
+
+          </Menu>
         </TableCell>
       </TableRow>
     ))

@@ -2,16 +2,8 @@
 import {Card,} from "@/components";
 import {
   Button,
-  Fab,
   Grid,
-  IconButton,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Tooltip, Typography
+  Stack, Typography
 } from "@mui/material";
 import {IconTools, IconUserPlus, IconVectorBezier} from "@tabler/icons-react";
 import {useRouter} from "next/navigation";
@@ -27,14 +19,14 @@ export default function Page() {
     <Grid container padding={2} spacing={2} size={{xs: 12, sm: 6}}>
       <Grid size={4}>
         <Card>
-          <Stack gap={2} direction={"column"} alignItems={"stretch"}>
+          <Stack gap={2} direction="column" alignItems={"stretch"}>
             <Button
               variant="contained"
               color="success"
               startIcon={<IconUserPlus/>}
               onClick={addUser}
             >
-              Add User
+              Add Employee
             </Button>
             <Button
               variant="contained"

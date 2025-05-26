@@ -1,4 +1,6 @@
 "use client";
+import {useState, useEffect} from "react";
+
 import {
   Stack,
   TextField,
@@ -7,23 +9,19 @@ import {
   Button,
   Autocomplete,
 } from "@mui/material";
+
 import {IconEye, IconEyeOff} from "@tabler/icons-react";
-import {useState} from "react";
 
 export default function DynamicForm({inputs, buttons}) {
   const [showPassword, setShowPassword] = useState({});
 
-  const [formValues, setFormValues] = useState(
-    inputs.reduce((acc, field) => {
-      acc[field.name] = field.value || "";
-      return acc;
-    }, {})
+  const [formValues, setFormValues] = useState({}
   );
 
-  const handleInputChange = (label, value) => {
+  const handleInputChange = (name, value) => {
     setFormValues((prevValues) => ({
       ...prevValues,
-      [label]: value,
+      [name]: value,
     }));
   };
 
@@ -33,6 +31,21 @@ export default function DynamicForm({inputs, buttons}) {
       [inputName]: !prev[inputName],
     }));
   };
+
+  useEffect(() => {
+    setFormValues((prevValues) => {
+      const values = inputs.reduce((acc, field) => {
+        if (field.type === "options" && Array.isArray(field.options)) {
+          acc[field.name] = prevValues[field.name] ||
+            field.options.find((option) => option.id === field.value) || null;
+        } else {
+          acc[field.name] = prevValues[field.name] || field.value || "";
+        }
+        return acc;
+      }, {});
+      return values;
+    });
+  }, [inputs]);
 
   return (
     <Stack>
@@ -46,13 +59,13 @@ export default function DynamicForm({inputs, buttons}) {
                 required={input.required}
                 fullWidth
                 options={input?.options ?? [""]}
+                value={formValues[input.name] || null}
                 onChange={(event, newValue) => {
-                  const id = newValue?.id;
-                  console.log(id)
-                  handleInputChange(input.name, id);
+                  handleInputChange(input.name, newValue);
                 }}
                 getOptionKey={(option) => option.id}
-                getOptionLabel={(option) => option.label}
+                getOptionLabel={(option) => (option && option.label) || ""}
+                isOptionEqualToValue={(option, value) => option?.id === value?.id}
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -81,6 +94,7 @@ export default function DynamicForm({inputs, buttons}) {
                 name={input.name}
                 label={input.label}
                 required={input.required}
+                value={formValues[input.name] || ""}
                 fullWidth
                 margin="normal"
                 variant="filled"
@@ -118,7 +132,7 @@ export default function DynamicForm({inputs, buttons}) {
             color={button.color}
             onClick={() => button.onClick(formValues)}
             sx={{margin: "8px"}}
-            loading={!!button?.loading}
+            // loading={!!button?.loading}
           >
             {button.label}
           </Button>
