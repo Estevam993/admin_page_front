@@ -5,7 +5,7 @@ import {
   Grid,
   Stack, Typography
 } from "@mui/material";
-import {IconTools, IconUserPlus, IconVectorBezier} from "@tabler/icons-react";
+import {IconUserPlus} from "@tabler/icons-react";
 import {useRouter} from "next/navigation";
 import {useEmployee} from "@/hooks";
 import {EmployeeTable} from "@/components/pages";

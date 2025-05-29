@@ -1,6 +1,5 @@
 import {postRequest, getRequest} from "@/util/http";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {setCookie} from "cookies-next";
 import {useRouter} from "next/navigation";
 import useToast from "@/services/useToast";
 import {useGetParameters} from "@/hooks/index";
@@ -18,11 +17,9 @@ const useEmployee = (id = null) => {
   const {data: allEmployees, isLoading: allEmployeesLoading} = useQuery({
     queryKey: ['employees'],
     queryFn: async () => {
-      const response = await getRequest({
+      return await getRequest({
         url: `${apiUrl}employee`,
       })
-
-      return response
     },
     enabled: !!user,
   })
@@ -31,11 +28,9 @@ const useEmployee = (id = null) => {
     queryKey: ['get_employee', id],
     queryFn: async ({queryKey}) => {
       const [, employeeId] = queryKey;
-      const response = await getRequest({
+      return await getRequest({
         url: `${apiUrl}employee/${employeeId}`,
       });
-
-      return response;
     },
     enabled: !!id,
   });

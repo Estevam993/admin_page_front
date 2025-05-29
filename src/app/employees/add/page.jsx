@@ -1,5 +1,4 @@
 "use client";
-import {useState} from "react";
 
 import {Card, Content, DynamicForm} from "@/components";
 
@@ -20,12 +19,12 @@ export default function Page() {
   const myButtons = buttons(false, create)
 
   return (<Content>
-      <Card title={"Insert Employee"} sx={{width: "100%", maxWidth: 700}}>
-        <DynamicForm
-          inputs={myInputs}
-          buttons={myButtons}
-        />
-      </Card>
-      <ToastComponent/>
-    </Content>);
+    <Card title={"Insert Employee"} sx={{width: "100%", maxWidth: 700}}>
+      <DynamicForm
+        inputs={myInputs}
+        buttons={myButtons}
+      />
+    </Card>
+    <ToastComponent/>
+  </Content>);
 }
