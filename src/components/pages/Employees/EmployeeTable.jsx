@@ -36,7 +36,7 @@ const EmployeeTable = ({allEmployees, allEmployeesLoading}) => {
   };
 
   if (allEmployees?.status === 'success' && !allEmployeesLoading) {
-    const employees = allEmployees.employees;
+    const employees = allEmployees.employees.sort((a, b) => b.id - a.id);
 
     const employeesMap = () => employees.map((employee, index) => (
       <TableRow key={index}>
