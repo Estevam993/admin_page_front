@@ -94,6 +94,77 @@ const useEmployee = (id = null) => {
     },
   });
 
+  const deleteEmployee = useMutation({
+    mutationKey: ['deleteEmployee'],
+    mutationFn: async id => {
+      return await postRequest({
+        url: `${apiUrl}employee/delete/${id}`
+      });
+    },
+    onSuccess: (response) => {
+      const message = response?.message || "Error"
+      if (response.status === "error") {
+        toast({
+          description: message,
+          status: "error",
+        });
+        return;
+      }
+      toast({
+        description: message,
+        status: "success",
+      });
+      queryClient.invalidateQueries('employees');
+      return response;
+    },
+    onError: (error) => {
+      toast({
+        description: "Erro ao realizar cadastro",
+        status: "error",
+      });
+      console.log(error);
+    },
+  });
+
+  const handleCreate = async formValues => {
+    try {
+      formValues = {...formValues, role: formValues.role.id, department: formValues.department.id}
+
+      await createEmployee.mutate(formValues)
+    } catch (e) {
+      toast({
+        description: e.message,
+        status: "error",
+      });
+    }
+  }
+
+  const handleUpdate = async formValues => {
+    try {
+      formValues = {...formValues, role: formValues.role.id, department: formValues.department.id}
+
+      await updateEmployee.mutate({id, params: formValues})
+    } catch (e) {
+      toast({
+        description: e.message,
+        status: "error",
+      });
+    }
+  }
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteEmployee.mutate(id);
+
+    } catch (e) {
+      console.log(e);
+      toast({
+        description: e.message,
+        status: "error",
+      });
+    }
+  }
+
   return {
     // All
     allEmployees,
@@ -103,8 +174,9 @@ const useEmployee = (id = null) => {
     isFetchingEmployee,
 
     // Actions
-    create: createEmployee.mutate,
-    update: updateEmployee.mutate,
+    create: handleCreate,
+    update: handleUpdate,
+    softDelete: handleDelete,
   };
 };
 

@@ -6,6 +6,7 @@ import {Card, Content, DynamicForm} from "@/components";
 import {useEmployee, useGetParameters} from '@/hooks'
 import {useEmployeeService} from "@/services";
 import {use} from "react";
+import useToast from "@/services/useToast";
 
 
 export default function Page({params}) {
@@ -13,9 +14,9 @@ export default function Page({params}) {
   const id = resolvedParams.id;
 
   const [values, setValues] = useState({})
-  const [loading, setLoading] = useState(false)
 
   const {parameters} = useGetParameters()
+  const {ToastComponent} = useToast();
 
   const {
     employee, isFetchingEmployee, update,
@@ -35,19 +36,9 @@ export default function Page({params}) {
   const roles = parameters ? parameters?.roles : {}
   const departments = parameters ? parameters?.departments : {}
 
-  const handleSubmit = async formValues => {
-    setLoading(true)
-    try {
-      formValues = {...formValues, role: formValues.role.id, department: formValues.department.id}
-      await update({id, params: formValues})
-    } finally {
-      setLoading(false)
-    }
-  }
-
   if (!isFetchingEmployee && employee && employee.status === 'success') {
     const myInputs = inputs(roles, departments, values)
-    const myButtons = buttons('Update', isFetchingEmployee, handleSubmit)
+    const myButtons = buttons(isFetchingEmployee, update, 'Update')
 
     return (<Content>
       <Card title={"Insert Employee"} sx={{width: "100%", maxWidth: 700}}>
@@ -56,6 +47,7 @@ export default function Page({params}) {
           buttons={myButtons}
         />
       </Card>
+      <ToastComponent/>
     </Content>)
   }
 }

@@ -4,7 +4,7 @@ import {useRouter} from "next/navigation";
 const useEmployeeService = () => {
   const router = useRouter()
 
-  const buttons = (label = 'Create', loading, handleSubmit) => {
+  const buttons = (loading, handleSubmit, label = 'Create') => {
     return [
       {
         label: "Cancel",

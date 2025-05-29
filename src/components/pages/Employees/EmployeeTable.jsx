@@ -16,12 +16,17 @@ import {
 } from "@mui/material";
 import {IconSettings, IconUserEdit, IconUserX} from "@tabler/icons-react";
 import {useRouter} from "next/navigation";
+import {useEmployee} from "@/hooks";
+import useToast from "@/services/useToast";
 
 const EmployeeTable = ({allEmployees, allEmployeesLoading}) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [employeeId, setEmployeeId] = useState(null);
   const router = useRouter()
   const open = Boolean(anchorEl);
+
+  const {softDelete} = useEmployee()
+  const {ToastComponent} = useToast();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -72,7 +77,10 @@ const EmployeeTable = ({allEmployees, allEmployeesLoading}) => {
                 Edit
               </ListItemText>
             </MenuItem>
-            <MenuItem>
+            <MenuItem
+              onClick={() => {
+                softDelete(employee.id)
+              }}>
               <ListItemIcon>
                 <IconUserX/>
               </ListItemIcon>
@@ -80,7 +88,6 @@ const EmployeeTable = ({allEmployees, allEmployeesLoading}) => {
                 Remove
               </ListItemText>
             </MenuItem>
-
           </Menu>
         </TableCell>
       </TableRow>
@@ -113,6 +120,7 @@ const EmployeeTable = ({allEmployees, allEmployeesLoading}) => {
         <TableBody>
           {employeesMap()}
         </TableBody>
+        <ToastComponent/>
       </Table>
     )
   }

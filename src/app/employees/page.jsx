@@ -28,22 +28,22 @@ export default function Page() {
             >
               Add Employee
             </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              startIcon={<IconVectorBezier/>}
-              onClick={addUser}
-            >
-              Add Department
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<IconTools/>}
-              onClick={addUser}
-            >
-              Add Role
-            </Button>
+            {/*<Button*/}
+            {/*  variant="contained"*/}
+            {/*  color="secondary"*/}
+            {/*  startIcon={<IconVectorBezier/>}*/}
+            {/*  onClick={addUser}*/}
+            {/*>*/}
+            {/*  Add Department*/}
+            {/*</Button>*/}
+            {/*<Button*/}
+            {/*  variant="contained"*/}
+            {/*  color="primary"*/}
+            {/*  startIcon={<IconTools/>}*/}
+            {/*  onClick={addUser}*/}
+            {/*>*/}
+            {/*  Add Role*/}
+            {/*</Button>*/}
 
           </Stack>
         </Card>
@@ -52,7 +52,7 @@ export default function Page() {
         <Card title={"Employees"}>
           {
             !allEmployeesLoading
-              ? <EmployeeTable allEmployees={allEmployees} allEmployeesLoading={allEmployeesLoading} />
+              ? <EmployeeTable allEmployees={allEmployees} allEmployeesLoading={allEmployeesLoading}/>
               : <Typography>Loading...</Typography>
           }
         </Card>
