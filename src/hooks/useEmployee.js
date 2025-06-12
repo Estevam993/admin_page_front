@@ -114,7 +114,7 @@ const useEmployee = (id = null) => {
     },
     onError: (error) => {
       toast({
-        description: "Erro ao realizar cadastro",
+        description: "Error occured while creating employee.",
         status: "error",
       });
       console.log(error);
@@ -152,7 +152,6 @@ const useEmployee = (id = null) => {
       await deleteEmployee.mutate(id);
 
     } catch (e) {
-      console.log(e);
       toast({
         description: e.message,
         status: "error",

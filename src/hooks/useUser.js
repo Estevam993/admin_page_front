@@ -31,7 +31,7 @@ const useUser = () => {
       await setCookie("id", response.id);
 
       toast({
-        description: "Login realizado com sucesso!",
+        description: "Successfully logged in!",
         status: "success",
       });
 
@@ -40,9 +40,9 @@ const useUser = () => {
 
       router.push("/employees");
     },
-    onError: (error) => {
+    onError: () => {
       toast({
-        description: "Erro ao realizar login",
+        description: "Error occured while logging in.",
         status: "error",
       });
       return false;
@@ -52,11 +52,10 @@ const useUser = () => {
   const registerMutation = useMutation({
     mutationFn: async (params) => {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      const data = await postRequest({
+      return await postRequest({
         url: `${apiUrl}user`,
         params: params,
       });
-      return data;
     },
     onSuccess: (response) => {
       const message = response?.message || "Error"
@@ -76,7 +75,7 @@ const useUser = () => {
     },
     onError: (error) => {
       toast({
-        description: "Erro ao realizar cadastro",
+        description: "Error occured while registering.",
         status: "error",
       });
       console.log(error);
